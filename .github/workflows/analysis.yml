@@ -1,0 +1,54 @@
+name: Repository Structure Analysis & PDF Build
+
+on:
+  push:
+    branches:
+      - main
+      - "arena/**"
+  pull_request:
+    branches:
+      - main
+      - "arena/**"
+  workflow_dispatch:
+
+jobs:
+  structure-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Python dependencies and fonts
+        run: |
+          if [ ! -f /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf ]; then
+            sudo apt-get update
+            sudo apt-get install -y fonts-dejavu-core
+          fi
+          python3 -m pip install --break-system-packages reportlab openpyxl pypdf pyyaml
+
+      - name: Generate structure analysis PDF and text report
+        run: |
+          python3 generate_pdf.py
+
+      - name: Verify PDF and text report
+        run: |
+          ls -lh Structure_Analysis.pdf analysis_report.txt
+          cat analysis_report.txt
+          python3 -c "
+          import pypdf
+          reader = pypdf.PdfReader('Structure_Analysis.pdf', strict=True)
+          assert len(reader.pages) >= 1, 'PDF has no pages'
+          text = '\n'.join(p.extract_text() for p in reader.pages)
+          assert 'Repository Structure Analysis' in text, 'Missing header in PDF'
+          assert 'Чек-лист операционной готовности' in text, 'Missing Cyrillic checklist title in PDF'
+          assert '■' not in text, 'Encoding corruption detected in PDF'
+          print(f'Verified Structure_Analysis.pdf successfully: {len(reader.pages)} pages.')
+          "
+
+      - name: Upload analysis artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: structure-analysis
+          path: |
+            Structure_Analysis.pdf
+            analysis_report.txt

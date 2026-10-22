@@ -1,0 +1,20 @@
+============================================================
+Repository Structure Analysis & Ozon Checklist Report
+============================================================
+Generated at : 2026-10-22 13:52:09 UTC
+Repository   : pmstein71-ui/Test
+Branch       : arena/f4dbc078-test
+Commit       : 9523bb6 Add files via upload
+.exe files   : 0 (No executable files found)
+
+Files in repository:
+  - .github/workflows/analysis.yml (1776 bytes)
+  - Ozon_чек_лист_операционной_готовности_партнера_заполнен.xlsx (26487 bytes)
+  - README.md (12 bytes)
+  - Structure_Analysis.pdf (87768 bytes)
+  - analysis_report.txt (896 bytes)
+  - generate_pdf.py (12914 bytes)
+
+Excel Workbook: Ozon_чек_лист_операционной_готовности_партнера_заполнен.xlsx
+  * Sheet 'Чек-лист': 42 non-empty rows
+  * Sheet 'Требования к фиксации': 15 non-empty rows
